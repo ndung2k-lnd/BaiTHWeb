@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f8;
+            color: #333;
+        }
+
+        .header {
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 10px 30px;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+        }
+
+        .header-nav img {
+            width:400px;
+            height: 100px;
+            object-fit:cover;
+        }
+        .form-box {
+            width: 100%;
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px 40px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-box h2 {
+            text-align: center;
+            color: #3D7EFC;
+            margin-bottom: 20px;
+        }
+
+        .form-box form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-box input {
+            margin-bottom: 15px;
+            padding: 10px 12px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            transition: border-color 0.3s;
+        }
+
+        .form-box input:focus {
+            border-color: #3D7EFC;
+            outline: none;
+        }
+
+        .form-box button {
+            padding: 10px;
+            font-size: 16px;
+            background-color: #3D7EFC;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-box button:hover {
+            background-color: #2554c7;
+        }
+
+        .form-box p {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .form-box a {
+            color: #3D7EFC;
+            text-decoration: none;
+        }
+
+        .form-box a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div class="header">
+            <nav class="header-nav">
+                <img src="https://media.hdu.edu.vn/Media/1_hdu_home/FolderFunc/202407/Images/logo-hdu-removebg-20240730104539-e.png" alt="logo">
+            </nav>
+        </div>
+
+        <div class="content">
+            <div class="form-container">
+                <div class="form-box" id="login-box">
+                    <h2>Đăng Nhập</h2>
+                    <form>
+                        <input type="text" id="log-username" placeholder="Tên đăng nhập" required>
+                        <input type="password" id="log-password" placeholder="Mật khẩu" required>
+                        <button onclick="handleLogin()">Đăng Nhập</button>
+                        <p>Bạn chưa có tài khoản? <a href="#" onclick="toggleForm('register')">Đăng ký</a></p>
+                    </form>
+                </div>
+
+                <div class="form-box" id="register-box" style="display: none;">
+                    <h2>Đăng Ký</h2>
+                    <form>
+                        <input type="text" id="res-username" placeholder="Tên đăng nhập" required>
+                        <input type="email" placeholder="Email" required>
+                        <input type="password" id="res-password" placeholder="Mật khẩu" required>
+                        <button onclick="handleRegister()">Đăng Ký</button>
+                        <p>Đã có tài khoản? <a href="#" onclick="toggleForm('login')">Đăng nhập</a></p>
+                    </form>
+                </div>
+                </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    function toggleForm(form) {
+        const loginBox = document.getElementById('login-box');
+        const registerBox = document.getElementById('register-box');
+
+        if (form === 'login') {
+            loginBox.style.display = 'block';
+            registerBox.style.display = 'none';
+        } else {
+            loginBox.style.display = 'none';
+            registerBox.style.display = 'block';
+        }
+    }
+
+  function handleRegister() {
+    let user = document.getElementById('res-username').value;
+    let pass = document.getElementById('res-password').value;
+
+    if (user && pass) {
+      if (localStorage.getItem(user)) {
+        alert("Tài khoản đã tồn tại!");
+      } else {
+        localStorage.setItem(user, pass);
+        alert("Đăng ký thành công!");
+        loginBox.style.display = 'block';
+        registerBox.style.display = 'none';
+      }
+    } else {
+        alert("Vui lòng nhập đầy đủ thông tin.");
+        }
+    }
+
+  function handleLogin() {
+    let user = document.getElementById('log-username').value;
+    let pass = document.getElementById('log-password').value;
+
+    if (localStorage.getItem(user) === pass) {
+        window.location.href = "BaiTH-DangKyHP.html";
+        alert("Đăng nhập thành công!");
+    } else {
+        alert("Sai tài khoản hoặc mật khẩu.");
+    }
+  }
+</script>
+</html>

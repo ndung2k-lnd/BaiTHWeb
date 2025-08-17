@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trường đại học Hồng Đức</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f8;
+            color: #333;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+
+        .box-df {
+            background-color: #fff;
+            width: 1200px;
+            min-height: 20px;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px !important
+        }
+
+        .header {
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 10px 30px;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+        }
+
+        .header-nav img {
+            width: 400px;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ccc;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        input,
+        button {
+            margin: 5px;
+            padding: 6px;
+        }
+
+        .form-container {
+            margin-bottom: 20px;
+        }
+
+        .form-container input {
+            width: 120px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <nav class="header-nav">
+            <img src="https://media.hdu.edu.vn/Media/1_hdu_home/FolderFunc/202407/Images/logo-hdu-removebg-20240730104539-e.png"
+                alt="logo">
+        </nav>
+    </div>
+
+    <div class="container">
+        <div class="box-df">
+            <div class="caption">
+                <span><b>QUẢN LÝ SINH VIÊN</b></span>
+            </div>
+
+            <div class="form-container">
+                <input type="text" id="maSV" placeholder="Mã SV">
+                <input type="text" id="hoTen" placeholder="Họ tên">
+                <input type="date" id="ngaySinh">
+                <input type="text" id="queQuan" placeholder="Quê quán">
+                <input type="text" id="cccd" placeholder="CCCD">
+                <input type="text" id="lop" placeholder="Lớp">
+                <input type="text" id="nganh" placeholder="Ngành">
+                <button onclick="addStudent()">Thêm</button>
+                <button onclick="updateStudent()" id="updateBtn" style="display: none;">Cập nhật</button>
+            </div>
+
+            <table id="studentTable">
+                <thead>
+                    <tr>
+                        <th>Mã SV</th>
+                        <th>Họ tên</th>
+                        <th>Ngày sinh</th>
+                        <th>Quê quán</th>
+                        <th>CCCD</th>
+                        <th>Lớp</th>
+                        <th>Ngành</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dữ liệu sẽ được thêm ở đây -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+<script>
+    let editIndex = null;
+
+    function addStudent() {
+        const maSV = document.getElementById("maSV").value;
+        const hoTen = document.getElementById("hoTen").value;
+        const ngaySinh = document.getElementById("ngaySinh").value;
+        const queQuan = document.getElementById("queQuan").value;
+        const cccd = document.getElementById("cccd").value;
+        const lop = document.getElementById("lop").value;
+        const nganh = document.getElementById("nganh").value;
+
+        if (!maSV || !hoTen) {
+            alert("Vui lòng nhập đầy đủ mã SV và họ tên.");
+            return;
+        }
+
+        const table = document.getElementById("studentTable").getElementsByTagName('tbody')[0];
+        const newRow = table.insertRow();
+
+        newRow.insertCell(0).innerText = maSV;
+        newRow.insertCell(1).innerText = hoTen;
+        newRow.insertCell(2).innerText = ngaySinh;
+        newRow.insertCell(3).innerText = queQuan;
+        newRow.insertCell(4).innerText = cccd;
+        newRow.insertCell(5).innerText = lop;
+        newRow.insertCell(6).innerText = nganh;
+
+        const actionCell = newRow.insertCell(7);
+        actionCell.innerHTML = `<button onclick="editStudent(this)">Sửa</button> 
+                                    <button onclick="deleteStudent(this)">Xóa</button>`;
+
+        clearForm();
+    }
+
+    function clearForm() {
+        document.getElementById("maSV").value = "";
+        document.getElementById("hoTen").value = "";
+        document.getElementById("ngaySinh").value = "";
+        document.getElementById("queQuan").value = "";
+        document.getElementById("cccd").value = "";
+        document.getElementById("lop").value = "";
+        document.getElementById("nganh").value = "";
+        document.getElementById("updateBtn").style.display = "none";
+        editIndex = null;
+    }
+
+    function deleteStudent(btn) {
+        const row = btn.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+    }
+
+    function editStudent(btn) {
+        const row = btn.parentNode.parentNode;
+        editIndex = row.rowIndex - 1;
+
+        const cells = row.getElementsByTagName("td");
+
+        document.getElementById("maSV").value = cells[0].innerText;
+        document.getElementById("hoTen").value = cells[1].innerText;
+        document.getElementById("ngaySinh").value = cells[2].innerText;
+        document.getElementById("queQuan").value = cells[3].innerText;
+        document.getElementById("cccd").value = cells[4].innerText;
+        document.getElementById("lop").value = cells[5].innerText;
+        document.getElementById("nganh").value = cells[6].innerText;
+
+        document.getElementById("updateBtn").style.display = "inline-block";
+    }
+
+    function updateStudent() {
+        const table = document.getElementById("studentTable").getElementsByTagName('tbody')[0];
+        const row = table.rows[editIndex];
+
+        row.cells[0].innerText = document.getElementById("maSV").value;
+        row.cells[1].innerText = document.getElementById("hoTen").value;
+        row.cells[2].innerText = document.getElementById("ngaySinh").value;
+        row.cells[3].innerText = document.getElementById("queQuan").value;
+        row.cells[4].innerText = document.getElementById("cccd").value;
+        row.cells[5].innerText = document.getElementById("lop").value;
+        row.cells[6].innerText = document.getElementById("nganh").value;
+
+        clearForm();
+    }
+</script>
+</script>
+
+</html>
